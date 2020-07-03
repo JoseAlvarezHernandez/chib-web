@@ -6,7 +6,8 @@ import { history } from './../_helpers'
 export const userActions = {
     login,
     logout,
-    register
+    register,
+    completeRegister
 }
 
 function login(email, password) {
@@ -16,8 +17,12 @@ function login(email, password) {
         userService.login(email, password)
             .then(
                 user => { 
-                    dispatch(success(user))
-                    history.push('/')
+                    if(user.message)
+                        dispatch(failure(user.message))
+                    else{
+                        dispatch(success(user))
+                        history.push('/')
+                    }
                 },
                 error => {
                     dispatch(failure(error.toString()))
@@ -56,5 +61,28 @@ function register(user) {
 
     function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
     function success(user) { return { type: userConstants.REGISTER_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
+}
+
+function completeRegister(user, data) {
+    return dispatch => {
+        dispatch(request(data))
+
+        userService.completeRegister(user, data)
+            .then(
+                response => {
+                    dispatch(success({...user, ...data}))
+                    dispatch(alertActions.success('Registration updated successfully'))
+                    history.push('/')
+                },
+                error => {
+                    dispatch(failure(error.toString()))
+                    dispatch(alertActions.error(error.toString()))
+                }
+            )
+    }
+
+    function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
+    function success(user) { return { type: userConstants.REGISTER_UPDATE, user } }
     function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }

@@ -6,7 +6,7 @@ export const userService = {
     login,
     logout,
     register,
-    update
+    completeRegister
 }
 
 function login(email, password) {
@@ -37,14 +37,15 @@ function register(user) {
     return fetch(`${apiUrl}users`, requestOptions).then(handleResponse)
 }
 
-function update(user) {
+function completeRegister(user, data) {
+    console.log('Header', authHeader(user))
     const requestOptions = {
         method: 'PUT',
-        headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
+        headers: { ...authHeader(user), 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
     }
 
-    return fetch(`${apiUrl}/users/${user.id}`, requestOptions).then(handleResponse)
+    return fetch(`${apiUrl}users`, requestOptions).then(handleResponse)
 }
 
 function handleResponse(response) {
