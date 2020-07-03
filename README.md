@@ -1,12 +1,6 @@
 ![API version](https://img.shields.io/badge/version-1.0-brightgreen.svg)
 # Chib Web App
 
-You can use my hosted api at 
-
-
-[My Web APP](https://chib-web.herokuapp.com/)
-
-
 ## Getting Started
 
 Assuming you already have installed Node, React and Redux follow the next steps if not you can find information about how to install them base on your OS 
