@@ -35,32 +35,33 @@ class LoginPage extends React.Component {
     }
 
     render() {
-        const { loggingIn } = this.props;
-        const { email, password, submitted } = this.state;
+        const { loggingIn, isRegistered } = this.props;
+        const { email, password, submitted,  } = this.state;
         return (
             <div className="col-md-6 col-md-offset-3">
-                <h2>Login</h2>
+                <h2>Inicio de sesión</h2>
+                {isRegistered && <h4>Bienvenido en horabuena, ahora solo inicia sesión.</h4>}
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div className={'form-group' + (submitted && !email ? ' has-error' : '')}>
-                        <label htmlFor="email">email</label>
-                        <input type="text" className="form-control" name="email" value={email} onChange={this.handleChange} />
+                        <label htmlFor="email">Corro Electronico</label>
+                        <input placeholder="micorreo@correo.com" type="text" className="form-control" name="email" value={email} onChange={this.handleChange} />
                         {submitted && !email &&
                             <div className="help-block">Correo electronico es requerido</div>
                         }
                     </div>
                     <div className={'form-group' + (submitted && !password ? ' has-error' : '')}>
-                        <label htmlFor="password">Password</label>
-                        <input type="password" className="form-control" name="password" value={password} onChange={this.handleChange} />
+                        <label htmlFor="password">Contraseña</label>
+                        <input placeholder="contraseña" type="password" className="form-control" name="password" value={password} onChange={this.handleChange} />
                         {submitted && !password &&
-                            <div className="help-block">Password is required</div>
+                            <div className="help-block">La contraseña es requerida</div>
                         }
                     </div>
                     <div className="form-group">
-                        <button className="btn btn-primary">Login</button>
+                        <button className="btn btn-primary">Iniciar</button>
                         {loggingIn &&
                             <img alt="login" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                         }
-                        <Link to="/register" className="btn btn-link">Register</Link>
+                        <Link to="/register" className="btn btn-link">Registrarte</Link>
                     </div>
                 </form>
             </div>
@@ -69,8 +70,8 @@ class LoginPage extends React.Component {
 }
 
 function mapState(state) {
-    const { loggingIn } = state.authentication;
-    return { loggingIn };
+    const { loggingIn, isRegistered } = state.authentication;
+    return { loggingIn, isRegistered };
 }
 
 const actionCreators = {

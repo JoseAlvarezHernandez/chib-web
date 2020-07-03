@@ -13,9 +13,11 @@ export function authentication(state = {loggedIn: false}, action) {
         user: action.user
       };
     case userConstants.LOGIN_FAILURE:
-      return { loggingIn: false };
+      return { loggedIn: false };
     case userConstants.LOGOUT:
-      return { loggingIn: false };
+      return { loggedIn: false };
+    case userConstants.REGISTER_SUCCESS:
+        return { isRegistered: true}
     default:
       return state
   }

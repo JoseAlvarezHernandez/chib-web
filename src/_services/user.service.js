@@ -31,10 +31,10 @@ function register(user) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
+        body: JSON.stringify({...user, type:'employee'})
     }
 
-    return fetch(`${apiUrl}/users/register`, requestOptions).then(handleResponse)
+    return fetch(`${apiUrl}users`, requestOptions).then(handleResponse)
 }
 
 function update(user) {
