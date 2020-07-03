@@ -1,53 +1,58 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { Router, Route, Switch, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+
+import { history } from './_helpers'
+import { alertActions } from './_actions'
+import { PrivateRoute } from './_components'
+import { HomePage } from './HomePage'
+import { LoginPage } from './LoginPage'
+import { RegisterPage } from './RegisterPage'
 
 import './App.scss'
 
-import {LoginComponent, RegisterComponent} from './components/auth'
-import {RightSide} from './components/side/rightSide'
+class App extends React.Component {
+    constructor(props) {
+        super(props)
 
-export default class App extends Component {
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isLogginActive: true
-    }
-  }
-
-  render(){
-    const { isLogginActive } = this.state
-    const current = isLogginActive ? 'LoginComponent' : 'RegisterComponent'
-    const currentActive = isLogginActive ? 'login' : 'register'
-
-    return(
-      <div className="App">
-        <div className="login">
-          <div className="container" ref={ref => (this.container = ref)}>
-            {isLogginActive && <LoginComponent containerRef={ref => (this.current = ref)} />}
-            {!isLogginActive && <RegisterComponent containerRef={ref => (this.current = ref)} />}
-          </div>
-          <RightSide 
-            current={current}
-            currentActive={currentActive}
-            containerRef={ref => this.RightSide = ref} 
-            onClick={this.changeState.bind(this)}
-            />
-        </div>
-      </div>
-    )
-  }
-
-  changeState() {
-    const { isLogginActive } = this.state;
-    if (isLogginActive) {
-      this.rightSide.classList.remove("right");
-      this.rightSide.classList.add("left");
-    } else {
-      this.rightSide.classList.remove("left");
-      this.rightSide.classList.add("right");
+        history.listen((location, action) => {
+            this.props.clearAlerts()
+        })
     }
 
-    this.setState(state => ({ isLogginActive: !state.isLogginActive}))
-  }
+    render() {
+        const { alert, loggedIn } = this.props
+        return (
+            <div className="jumbotron">
+                <div className="container">
+                    <div className="col-sm-8 col-sm-offset-2">
+                        {alert && alert.message &&
+                            <div className={`alert ${alert?.type}`}>{alert?.message}</div>
+                        }
+                        <Router history={history}>
+                            <Switch>
+                                <PrivateRoute loggedIn={loggedIn} exact path="/" component={HomePage} />
+                                <Route path="/login" component={LoginPage} />
+                                <Route path="/register" component={RegisterPage} />
+                                <Redirect from="*" to="/" />
+                            </Switch>
+                        </Router>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 }
+
+function mapState(state) {
+    const { alert, authentication } = state
+    const { loggedIn } = authentication
+    return { alert, loggedIn }
+}
+
+const actionCreators = {
+    clearAlerts: alertActions.clear
+}
+
+const connectedApp = connect(mapState, actionCreators)(App)
+export { connectedApp as App }
